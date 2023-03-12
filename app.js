@@ -1,6 +1,7 @@
 const express = require('express'); //p/ chamar o express
-const app = express(); //criar varia vel e chamar o express p/ utulizar as propriedades
+const app = express(); //criar variavel e chamar o express p/ utulizar as propriedades
 const router = require('./router/router')
+
 app.use(router); //usando o router
 
 app.listen(8080, function(req, res){//servidor local
