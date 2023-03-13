@@ -1,4 +1,5 @@
-const axios = require("axios"); //p/ chamar o axios e consumir a api
+const axios = require('axios'); //p/ chamar o axios e consumir a api
+const fs = require('fs');
 
 module.exports = {
   async procuraPerfilGitHub(request, response) {
@@ -15,47 +16,24 @@ module.exports = {
         imagem = resposta.data.avatar_url;
         local = resposta.data.location;
 
-        const perfilHtml = `
-        <html>
-        <head>
-            <style>
-            body {
-                text-align: center;
-                font-family: Arial, roboto;
-                background-color: #010409;
-            }
-            h1 {
-                font-size: 36px;
-                margin-top: 50px;
-                color:#C9D1D9;
-            }
-            img {
-                width: 210px;
-                height: 210px;
-                border-radius: 50%;
-                margin-top: 20px;
-            }
-            h2 {
-                font-size: 24px;
-                margin-top: 20px;
-                color:#C9D1D9;
-            }
-            </style>
-        </head>
-        <body>
-            <h1>${nome}</h1>
-            <img src="${imagem}" alt="${nome}'s profile picture"/>
-            <h2>${bio}</h2>
-            <h2>${local}</h2>
-          </body>
-        </html>
-      `;
+        fs.promises.readFile('./perfil.html', 'utf8')
+          .then((html) => {
+            html = html.replace('{nome}', nome);
+            html = html.replace('{bio}', bio);
+            html = html.replace('{imagem}', imagem);
+            html = html.replace('{local}', local);
+            html = html.replace('{css}', '<link rel="stylesheet" href="/style/perfil.css">');
 
-        return response.send(perfilHtml)
+            return response.send(html);
+          })
+          .catch((err) => {
+            response.json({ msg: "Erro ao ler arquivos" + err });
+          });
+        
 
-    })
-    .catch((err) => {
+      })
+      .catch((err) => {
         response.json({ msg: "Perfil não encontrado" + err });
-    });
-},
+      });
+  },
 };
