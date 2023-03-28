@@ -10,7 +10,6 @@ npm install express --save
 
 npm install axios --save
 
-Rodar a aplicação
 npm start
 
 ------
